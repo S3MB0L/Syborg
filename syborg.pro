@@ -9,11 +9,10 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-SOURCES += main.cpp \
-    client.c \
-    serial.c \
-    server.c \
-    socket.c
+SOURCES += main.cpp
+SOURCES += client.c
+SOURCES += serial.c
+SOURCES += server.c
+SOURCES += socket.c
 
-HEADERS += \
-    main.h
+HEADERS += main.h

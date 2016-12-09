@@ -9,14 +9,14 @@ int set_interface_attribs(int fd, int speed);
 void set_mincount(int fd, int mcount);
 
 
-int serialcomm(char *port, int baudR,int buffer, int display)
+int serial_comm(char *port, int baudR,int buffer, int display)
 {
     serial_data.baudrate=baudR;
     serial_data.port=port;
     serial_data.buff=buffer;
     serial_data.display=display;
 
-    int opt;
+//    int opt;
 //    while((opt=getopt(argc,argv,"p:b:r:d:"))!=-1){
 //        switch (opt) {
 //        case 'p':

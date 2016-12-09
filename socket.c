@@ -8,10 +8,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "main.h"
+#include <main.h>
 
 int net_connection (int status, int buffer, int port, char *ip) {
-    int cnt=0;
+//  int cnt=0;
 
     command.close="./close\n";
     command.set="./set_relayx\n";
