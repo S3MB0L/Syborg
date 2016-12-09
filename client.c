@@ -1,7 +1,5 @@
 #include "main.h"
 
-
-
 int client(struct socket_data socket_1)
 {
     int sockfd, portno, n;

@@ -13,6 +13,8 @@
 #include <fcntl.h>
 #include <termios.h>
 #include <errno.h>
+#include <pthread.h>
+
 
 struct socket_data{
     int opt;
@@ -41,6 +43,6 @@ int client(struct socket_data socket_1);
 int server(struct socket_data socket_1);
 int check_command(char *buff, struct commands *x);
 int net_connection (int status, int buffer, int port, char *ip);
-int serialcomm(char *port, int baudR,int buffer, int display);
+int serial_comm(char *port, int baudR,int buffer, int display);
 
 #endif // MAIN_H
