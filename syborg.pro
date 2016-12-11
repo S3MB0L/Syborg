@@ -1,18 +1,6 @@
-QT += core
-QT -= gui
-
-CONFIG += c++11
-
-TARGET = syborg
+TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle
+CONFIG -= qt
 
-TEMPLATE = app
-
-SOURCES += main.cpp
-SOURCES += client.c
-SOURCES += serial.c
-SOURCES += server.c
-SOURCES += socket.c
-
-HEADERS += main.h
+SOURCES += main.c

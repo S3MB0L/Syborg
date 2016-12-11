@@ -14,6 +14,8 @@
 #include <termios.h>
 #include <errno.h>
 #include <pthread.h>
+#include <thread_db.h>
+
 
 
 struct socket_data{
