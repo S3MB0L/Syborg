@@ -5,14 +5,14 @@
  *	
  *
  */
-#include "main.h"						//
-#include "stm32f0xx_hal.h"	//	Hardware abstract layer libraries
-#include "cmsis_os.h"				//
+#include "main.h"           //
+#include "stm32f0xx_hal.h"  //	Hardware abstract layer libraries
+#include "cmsis_os.h"       //
 
-#include <stdio.h>					//	Standart C libraries for;
-#include <stdlib.h>					//	strings and commands
-#include <string.h>					//
-#define BUFF_SIZE 10				// Buffer size of uart channel
+#include <stdio.h>          //	Standart C libraries for;
+#include <stdlib.h>         //	strings and commands
+#include <string.h>         //
+#define BUFF_SIZE 10        // Buffer size of uart channel
 
 
 CRC_HandleTypeDef hcrc;
