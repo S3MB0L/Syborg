@@ -1,74 +1,36 @@
-/**
-  ******************************************************************************
-  * File Name          : main.c
-  * Description        : Main program body
-  ******************************************************************************
-  *
-  * Copyright (c) 2016 STMicroelectronics International N.V. 
-  * All rights reserved.
-  *
-  * Redistribution and use in source and binary forms, with or without 
-  * modification, are permitted, provided that the following conditions are met:
-  *
-  * 1. Redistribution of source code must retain the above copyright notice, 
-  *    this list of conditions and the following disclaimer.
-  * 2. Redistributions in binary form must reproduce the above copyright notice,
-  *    this list of conditions and the following disclaimer in the documentation
-  *    and/or other materials provided with the distribution.
-  * 3. Neither the name of STMicroelectronics nor the names of other 
-  *    contributors to this software may be used to endorse or promote products 
-  *    derived from this software without specific written permission.
-  * 4. This software, including modifications and/or derivative works of this 
-  *    software, must execute solely and exclusively on microcontroller or
-  *    microprocessor devices manufactured by or for STMicroelectronics.
-  * 5. Redistribution and use of this software other than as permitted under 
-  *    this license is void and will automatically terminate your rights under 
-  *    this license. 
-  *
-  * THIS SOFTWARE IS PROVIDED BY STMICROELECTRONICS AND CONTRIBUTORS "AS IS" 
-  * AND ANY EXPRESS, IMPLIED OR STATUTORY WARRANTIES, INCLUDING, BUT NOT 
-  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-  * PARTICULAR PURPOSE AND NON-INFRINGEMENT OF THIRD PARTY INTELLECTUAL PROPERTY
-  * RIGHTS ARE DISCLAIMED TO THE FULLEST EXTENT PERMITTED BY LAW. IN NO EVENT 
-  * SHALL STMICROELECTRONICS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
-  * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
-  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
-  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  *
-  ******************************************************************************
-  */
-/* Includes ------------------------------------------------------------------*/
-#include "main.h"
-#include "stm32f0xx_hal.h"
-#include "cmsis_os.h"
+/*	Author: Tarkan Dalay
+ *	E-Mail: tarkandalay52@gmail.com
+ *	Date:		19/12/2016
+ *	Rev:		0.02b
+ *	
+ *
+ */
+#include "main.h"						//
+#include "stm32f0xx_hal.h"	//	Hardware abstract layer libraries
+#include "cmsis_os.h"				//
 
-/* USER CODE BEGIN Includes */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#define BUFF_SIZE 10
-/* USER CODE END Includes */
+#include <stdio.h>					//	Standart C libraries for;
+#include <stdlib.h>					//	strings and commands
+#include <string.h>					//
+#define BUFF_SIZE 10				// Buffer size of uart channel
 
-/* Private variables ---------------------------------------------------------*/
+
 CRC_HandleTypeDef hcrc;
-
 UART_HandleTypeDef huart1;
 
-osThreadId defaultTaskHandle;
+osThreadId defaultTaskHandle;	
 osThreadId controlTaskHandle;
 osThreadId sensorTaskHandle;
-/* USER CODE BEGIN PV */
-/* Private variables ---------------------------------------------------------*/
+
 __IO uint8_t buffer[BUFF_SIZE];
-uint32_t command_status[]={0,0};
+
+//strings for commands under uart communication
 uint8_t led1_on[]="led1 on";
 uint8_t led2_on[]="led2 on";
 uint8_t led1_off[]="led1 of";
 uint8_t led2_off[]="led2 of";
 
+//struct for command status
 struct control_unit{
 	_Bool relay_1;
 	_Bool relay_2;
@@ -78,7 +40,7 @@ struct control_unit{
 	
 	_Bool send_status;	
 }set;
-
+//struct for sensor data
 struct data{
 	uint32_t temperature_1;
 	uint32_t temperature_2;
@@ -98,36 +60,21 @@ struct data{
 }sensor_data;
 
 
-/* USER CODE END PV */
 
-/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void Error_Handler(void);
 static void MX_GPIO_Init(void);
 static void MX_CRC_Init(void);
 static void MX_USART1_UART_Init(void);
+
 void StartDefaultTask(void const * argument);
 void control_task(void const * argument);
 void sensor_task(void const * argument);
+
 int check_command(uint8_t cmd[]);
-/* USER CODE BEGIN PFP */
-/* Private function prototypes -----------------------------------------------*/
-
-/* USER CODE END PFP */
-
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
 
 int main(void)
 {
-
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration----------------------------------------------------------*/
-
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
@@ -139,21 +86,12 @@ int main(void)
   MX_CRC_Init();
   MX_USART1_UART_Init();
 
-  /* USER CODE BEGIN 2 */
 
-  /* USER CODE END 2 */
-
-  /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
-  /* USER CODE END RTOS_MUTEX */
 
-  /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
-  /* USER CODE END RTOS_SEMAPHORES */
 
-  /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
-  /* USER CODE END RTOS_TIMERS */
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
@@ -165,13 +103,10 @@ int main(void)
 	
   osThreadDef(sensorTaskHandle, sensor_task, osPriorityNormal, 0, 128);
   sensorTaskHandle = osThreadCreate(osThread(sensorTaskHandle), NULL);
-  /* USER CODE BEGIN RTOS_THREADS */
+	
   /* add threads, ... */
-  /* USER CODE END RTOS_THREADS */
-
-  /* USER CODE BEGIN RTOS_QUEUES */
+	
   /* add queues, ... */
-  /* USER CODE END RTOS_QUEUES */
  
 
   /* Start scheduler */
@@ -180,15 +115,12 @@ int main(void)
   /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+	
   while (1)
   {
-  /* USER CODE END WHILE */
 
-  /* USER CODE BEGIN 3 */
 
   }
-  /* USER CODE END 3 */
 
 }
 
@@ -314,7 +246,6 @@ static void MX_GPIO_Init(void)
 
 }
 
-/* USER CODE BEGIN 4 */
 int check_command(uint8_t cmd[]){
 	int i=0,cnt=0;
 
@@ -341,13 +272,11 @@ int check_command(uint8_t cmd[]){
 	
 	return 0;
 }
-/* USER CODE END 4 */
 
 /* StartDefaultTask function */
 void StartDefaultTask(void const * argument)
 {
 
-  /* USER CODE BEGIN 5 */
   /* Infinite loop */
   for(;;)
   {
@@ -356,33 +285,28 @@ void StartDefaultTask(void const * argument)
 		HAL_UART_Transmit(&huart1,(uint8_t *)&buffer,BUFF_SIZE,1000);
     osDelay(1);
   }
-  /* USER CODE END 5 */ 
 }
 
 void control_task(void const * argument)
 {
 
-  /* USER CODE BEGIN 5 */
   /* Infinite loop */
   for(;;)
   {
 
     osDelay(1);
   }
-  /* USER CODE END 5 */ 
 }
 
 void sensor_task(void const * argument)
 {
 
-  /* USER CODE BEGIN 5 */
   /* Infinite loop */
   for(;;)
   {
 
     osDelay(1);
   }
-  /* USER CODE END 5 */ 
 }
 /**
   * @brief  Period elapsed callback in non blocking mode
@@ -394,15 +318,11 @@ void sensor_task(void const * argument)
   */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-/* USER CODE BEGIN Callback 0 */
 
-/* USER CODE END Callback 0 */
   if (htim->Instance == TIM3) {
     HAL_IncTick();
   }
-/* USER CODE BEGIN Callback 1 */
-
-/* USER CODE END Callback 1 */
+	
 }
 
 /**
@@ -412,7 +332,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   */
 void Error_Handler(void)
 {
-  /* USER CODE BEGIN Error_Handler */
   /* User can add his own implementation to report the HAL error return state */
   while(1) 
   {
