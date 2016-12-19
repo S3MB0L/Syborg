@@ -58,7 +58,8 @@ CRC_HandleTypeDef hcrc;
 UART_HandleTypeDef huart1;
 
 osThreadId defaultTaskHandle;
-
+osThreadId controlTaskHandle;
+osThreadId sensorTaskHandle;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 __IO uint8_t buffer[BUFF_SIZE];
@@ -67,6 +68,36 @@ uint8_t led1_on[]="led1 on";
 uint8_t led2_on[]="led2 on";
 uint8_t led1_off[]="led1 of";
 uint8_t led2_off[]="led2 of";
+
+struct control_unit{
+	_Bool relay_1;
+	_Bool relay_2;
+	_Bool relay_3;
+	_Bool relay_4;
+	_Bool relay_5;
+	
+	_Bool send_status;	
+}set;
+
+struct data{
+	uint32_t temperature_1;
+	uint32_t temperature_2;
+	uint32_t temperature_3;
+	uint32_t temperature_4;
+	
+	uint32_t humidity_1;
+	uint32_t humidity_2;
+	uint32_t humidity_3;
+	uint32_t humidity_4;
+	
+	uint32_t amperH;
+	uint32_t wattH;
+	
+	uint32_t airQuality;
+	
+}sensor_data;
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -76,6 +107,8 @@ static void MX_GPIO_Init(void);
 static void MX_CRC_Init(void);
 static void MX_USART1_UART_Init(void);
 void StartDefaultTask(void const * argument);
+void control_task(void const * argument);
+void sensor_task(void const * argument);
 int check_command(uint8_t cmd[]);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -127,6 +160,11 @@ int main(void)
   osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
+  osThreadDef(controlTaskHandle, control_task, osPriorityNormal, 0, 128);
+  controlTaskHandle = osThreadCreate(osThread(controlTaskHandle), NULL);
+	
+  osThreadDef(sensorTaskHandle, sensor_task, osPriorityNormal, 0, 128);
+  sensorTaskHandle = osThreadCreate(osThread(sensorTaskHandle), NULL);
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -279,48 +317,26 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 int check_command(uint8_t cmd[]){
 	int i=0,cnt=0;
-//	while(1){
-//		if(cmd[i]=='/')
-//			break;
-//		i++;
-//	}
-//	i++;
-//	int i2=i;
-//	while(1){
-//		if(cmd[i]==command1[cnt])
-//			command_status[0]=1;
-//		else
-//			command_status[0]=0;
-//		
-//		if(cmd[i]=='/')
-//			break;
-//		i++;
-//		cnt++;
-//	}
-//	cnt=0;
-//	while(1){
-//		if(cmd[i2]==command2[cnt])
-//			command_status[1]=1;
-//		else
-//			command_status[1]=0;
-//		
-//		if(cmd[i2]=='/')
-//			break;
-//		i2++;
-//		cnt++;
-//	}
+
 	if(!strcmp((uint8_t *)&buffer,(uint8_t*)&led1_on))
+	{
 		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,GPIO_PIN_SET);
+	}
 	
 	if(!strcmp((uint8_t *)&buffer,(uint8_t *)&led1_off))
+	{
 		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,GPIO_PIN_RESET);
+	}
 	
 	if(!strcmp((uint8_t *)&buffer,(uint8_t *)&led2_on))
+	{
 		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,GPIO_PIN_SET);
+	}
 	
 	if(!strcmp((uint8_t *)&buffer,(uint8_t *)&led2_off))
+	{
 		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,GPIO_PIN_RESET);
-	
+	}
 	
 	
 	return 0;
@@ -343,6 +359,31 @@ void StartDefaultTask(void const * argument)
   /* USER CODE END 5 */ 
 }
 
+void control_task(void const * argument)
+{
+
+  /* USER CODE BEGIN 5 */
+  /* Infinite loop */
+  for(;;)
+  {
+
+    osDelay(1);
+  }
+  /* USER CODE END 5 */ 
+}
+
+void sensor_task(void const * argument)
+{
+
+  /* USER CODE BEGIN 5 */
+  /* Infinite loop */
+  for(;;)
+  {
+
+    osDelay(1);
+  }
+  /* USER CODE END 5 */ 
+}
 /**
   * @brief  Period elapsed callback in non blocking mode
   * @note   This function is called  when TIM3 interrupt took place, inside

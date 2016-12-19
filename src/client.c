@@ -1,4 +1,4 @@
-#include "main.h"
+#include <inc/main.h>
 
 int client(struct socket_data socket_1)
 {
@@ -8,22 +8,25 @@ int client(struct socket_data socket_1)
     char buffer[256];
 
     portno = socket_1.portnum;
+    do{
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0) 
-        error("ERROR opening socket");
+        printf("connecting socket\n");
+    }while(sockfd<0);
+
+    do{
     server = gethostbyname(socket_1.ip);
-    if (server == NULL) {
-        fprintf(stderr,"ERROR, no such host\n");
-        exit(0);
-    }
+        printf("waiting for server\n");
+    }while(server==NULL);
+
     bzero((char *) &serv_addr, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     bcopy((char *)server->h_addr, 
          (char *)&serv_addr.sin_addr.s_addr,
          server->h_length);
     serv_addr.sin_port = htons(portno);
-    if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
-        error("ERROR connecting");
+
+    while(connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
+        printf("waiting for connecting\n");
     while(1){
         printf("Please enter the message: ");
         bzero(buffer,256);

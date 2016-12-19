@@ -44,7 +44,7 @@ void error(const char *msg);
 int client(struct socket_data socket_1);
 int server(struct socket_data socket_1);
 int check_command(char *buff, struct commands *x);
-int net_connection (int status, int buffer, int port, char *ip);
-int serial_comm(char *port, int baudR,int buffer, int display);
+int net_connection (struct socket_data socket_1);
+int serial_comm(struct serialcomm serial_data);
 
 #endif // MAIN_H

@@ -1,4 +1,4 @@
-#include "main.h"
+#include <inc/main.h>
 
 #define DISPLAY_STRING
 
@@ -9,12 +9,12 @@ int set_interface_attribs(int fd, int speed);
 void set_mincount(int fd, int mcount);
 
 
-int serial_comm(char *port, int baudR,int buffer, int display)
+int serial_comm(struct serialcomm serial_data)
 {
-    serial_data.baudrate=baudR;
-    serial_data.port=port;
-    serial_data.buff=buffer;
-    serial_data.display=display;
+//    serial_data.baudrate=baudR;
+//    serial_data.port=port;
+//    serial_data.buff=buffer;
+//    serial_data.display=display;
 
 //    int opt;
 //    while((opt=getopt(argc,argv,"p:b:r:d:"))!=-1){

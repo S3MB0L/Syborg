@@ -8,19 +8,19 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "main.h"
+#include <inc/main.h>
 
-int net_connection (int status, int buffer, int port, char *ip) {
+int net_connection (struct socket_data socket_1) {
 //  int cnt=0;
 
     command.close="./close\n";
     command.set="./set_relayx\n";
     command.status="./status\n";
 
-    socket_1.buff_size=buffer;
-    socket_1.portnum=port;
-    socket_1.socket_status=status;
-    socket_1.ip=ip;
+//    socket_1.buff_size=buffer;
+//    socket_1.portnum=port;
+//    socket_1.socket_status=status;
+//    socket_1.ip=ip;
 
 //    while((socket_1.opt=getopt(argc,argv,"sc:p:b:n:"))!=-1){
 //        //printf("%c",opt[cnt]);
